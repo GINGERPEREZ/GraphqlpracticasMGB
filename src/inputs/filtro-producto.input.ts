@@ -1,6 +1,6 @@
-import { Field, Float, ID, InputType, Int } from '@nestjs/graphql';
+import { Field, Float, ID, InputType } from '@nestjs/graphql';
 
-@InputType({ description: 'Filtro avanzado para buscar productos.' })
+@InputType({ description: 'Filtro avanzado para buscar platillos (dishes).' })
 export class FiltroProductoInput {
   @Field(() => String, { nullable: true, description: 'Busqueda por nombre (contiene).' })
   nombre?: string;
@@ -11,9 +11,9 @@ export class FiltroProductoInput {
   @Field(() => Float, { nullable: true, description: 'Precio maximo.' })
   precioMax?: number;
 
-  @Field(() => ID, { nullable: true, description: 'Categoria id.' })
-  categoriaId?: string;
+  @Field(() => ID, { nullable: true, description: 'Restaurant id.' })
+  restaurantId?: string;
 
-  @Field(() => Int, { nullable: true, description: 'Stock minimo.' })
-  stockMin?: number;
+  @Field(() => ID, { nullable: true, description: 'Menu id.' })
+  menuId?: string;
 }

@@ -10,23 +10,23 @@ export class BusquedaService {
 
   private baseUrl = 'http://localhost:3000';
 
-  async findAllProductos(): Promise<any[]> {
-    const url = `${this.baseUrl}/productos`;
-    this.logger.debug(`Requesting productos from ${url}`);
+  async findAllDishes(): Promise<any[]> {
+    const url = `${this.baseUrl}/dishes`;
+    this.logger.debug(`Requesting dishes from ${url}`);
     const res = await firstValueFrom(this.httpService.get(url));
     return res.data ?? [];
   }
 
-  async findAllClientes(): Promise<any[]> {
-    const url = `${this.baseUrl}/clientes`;
-    this.logger.debug(`Requesting clientes from ${url}`);
+  async findAllUsers(): Promise<any[]> {
+    const url = `${this.baseUrl}/users`;
+    this.logger.debug(`Requesting users from ${url}`);
     const res = await firstValueFrom(this.httpService.get(url));
     return res.data ?? [];
   }
 
-  async findAllVentas(): Promise<any[]> {
-    const url = `${this.baseUrl}/ventas`;
-    this.logger.debug(`Requesting ventas from ${url}`);
+  async findAllPayments(): Promise<any[]> {
+    const url = `${this.baseUrl}/payments`;
+    this.logger.debug(`Requesting payments from ${url}`);
     const res = await firstValueFrom(this.httpService.get(url));
     return res.data ?? [];
   }

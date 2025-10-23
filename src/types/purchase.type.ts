@@ -1,17 +1,23 @@
 import { Field, Float, ID, ObjectType } from '@nestjs/graphql';
 import { GraphQLISODateTime } from '@nestjs/graphql';
 
-@ObjectType({ description: 'Compra/venta realizada por un cliente.' })
+@ObjectType({ description: 'Resumen de un pago registrado en la API REST.' })
 export class PurchaseType {
   @Field(() => ID)
   id!: string;
 
   @Field(() => ID)
-  clienteId!: string;
+  reservationId!: string;
+
+  @Field(() => ID)
+  userId!: string;
 
   @Field(() => Float)
-  total!: number;
+  amount!: number;
+
+  @Field(() => String)
+  currency!: string;
 
   @Field(() => GraphQLISODateTime)
-  fecha!: Date;
+  paidAt!: Date;
 }
