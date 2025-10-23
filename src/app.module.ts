@@ -5,7 +5,6 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'node:path';
 import { AgregacionModule } from './agregacion/agregacion.module.js';
-import { AnalyticsModule } from './analytics/analytics.module.js';
 import { BusquedaModule } from './busqueda/busqueda.module.js';
 
 @Module({
@@ -17,7 +16,6 @@ import { BusquedaModule } from './busqueda/busqueda.module.js';
       introspection: true,
     }),
     AgregacionModule,
-    AnalyticsModule,
     BusquedaModule,
   ],
   controllers: [AppController],
