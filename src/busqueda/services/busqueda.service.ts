@@ -12,15 +12,20 @@ export class BusquedaService {
     return process.env.REST_API_URL?.replace(/\/$/, '') ?? 'http://localhost:3000';
   }
 
-  private async safeGetList(url: string): Promise<any[]> {
+  private async safeGet<T>(url: string): Promise<T | null> {
     try {
       this.logger.debug(`Requesting ${url}`);
       const res = await firstValueFrom(this.httpService.get(url));
-      return res.data ?? [];
+      return (res.data as T) ?? null;
     } catch (err: any) {
       this.logger.warn(`Failed to fetch ${url}: ${err?.message ?? err}`);
-      return [];
+      return null;
     }
+  }
+
+  private async safeGetList(url: string): Promise<any[]> {
+    const data = await this.safeGet<any[]>(url);
+    return Array.isArray(data) ? data : [];
   }
 
   async findAllDishes(): Promise<any[]> {
@@ -37,5 +42,21 @@ export class BusquedaService {
 
   async findAllMenus(): Promise<any[]> {
     return this.safeGetList(`${this.baseUrl}/menus`);
+  }
+
+  async findMenuById(id: string): Promise<any | null> {
+    return this.safeGet<any>(`${this.baseUrl}/menus/${id}`);
+  }
+
+  async findRestaurantById(id: string): Promise<any | null> {
+    return this.safeGet<any>(`${this.baseUrl}/restaurants/${id}`);
+  }
+
+  async findUserById(id: string): Promise<any | null> {
+    return this.safeGet<any>(`${this.baseUrl}/users/${id}`);
+  }
+
+  async findReservationById(id: string): Promise<any | null> {
+    return this.safeGet<any>(`${this.baseUrl}/reservations/${id}`);
   }
 }
