@@ -57,10 +57,13 @@ input FiltroHistorialInput {
   totalMin: Float
 }
 
-"""Filtro avanzado para buscar productos."""
+"""Filtro avanzado para buscar platillos (dishes)."""
 input FiltroProductoInput {
-  """Categoria id."""
-  categoriaId: ID
+  """Menu id."""
+  menuId: ID
+
+  """Menu name (category name) para buscar por nombre de categoria."""
+  menuName: String
 
   """Busqueda por nombre (contiene)."""
   nombre: String
@@ -71,8 +74,8 @@ input FiltroProductoInput {
   """Precio minimo."""
   precioMin: Float
 
-  """Stock minimo."""
-  stockMin: Int
+  """Restaurant id."""
+  restaurantId: ID
 }
 
 """Informacion de un menu disponible en un restaurante."""
@@ -128,10 +131,24 @@ type PerfilUsuarioType {
 
 """Representa un producto encontrado."""
 type ProductResultType {
-  categoryId: String
   id: ID!
+
+  """Menu asociado, resuelto bajo demanda desde la API REST."""
+  menu: MenuType
+
+  """Identificador del menu (categoria) al que pertenece el plato."""
+  menuId: String
+
+  """Nombre del menu/categoria asociado al plato cuando esta disponible."""
+  menuName: String
   name: String!
   price: Float!
+
+  """Restaurante asociado, resuelto bajo demanda desde la API REST."""
+  restaurant: RestaurantType
+
+  """Identificador del restaurante proveedor del plato."""
+  restaurantId: String
   stock: Int!
 }
 
@@ -143,17 +160,25 @@ type ProductoDetalladoType {
   ultimasResenas: [ReviewType!]!
 }
 
-"""Compra/venta realizada por un cliente."""
+"""Resumen de un pago registrado en la API REST."""
 type PurchaseType {
-  clienteId: ID!
-  fecha: DateTime!
+  amount: Float!
+  currency: String!
   id: ID!
-  total: Float!
+  paidAt: DateTime!
+
+  """Reservacion asociada al pago, resuelta bajo demanda."""
+  reservation: ReservationSummaryType
+  reservationId: ID!
+
+  """Usuario que realizo el pago, resuelto bajo demanda."""
+  user: UserType
+  userId: ID!
 }
 
 type Query {
   """Buscar clientes por nombre o email y ordenarlos por campo dado."""
-  buscarClientes(criterio: String!, orden: String): [UserType!]!
+  buscarClientes(criterio: String, orden: String): [UserType!]!
 
   """Busqueda avanzada de productos con paginacion y filtros."""
   buscarProductos(filtro: FiltroProductoInput, paginacion: PaginationInput): PaginatedProductsType!

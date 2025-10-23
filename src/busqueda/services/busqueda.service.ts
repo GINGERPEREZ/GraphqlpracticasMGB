@@ -8,26 +8,34 @@ export class BusquedaService {
 
   constructor(private readonly httpService: HttpService) {}
 
-  private baseUrl = 'http://localhost:3000';
+  private get baseUrl(): string {
+    return process.env.REST_API_URL?.replace(/\/$/, '') ?? 'http://localhost:3000';
+  }
+
+  private async safeGetList(url: string): Promise<any[]> {
+    try {
+      this.logger.debug(`Requesting ${url}`);
+      const res = await firstValueFrom(this.httpService.get(url));
+      return res.data ?? [];
+    } catch (err: any) {
+      this.logger.warn(`Failed to fetch ${url}: ${err?.message ?? err}`);
+      return [];
+    }
+  }
 
   async findAllDishes(): Promise<any[]> {
-    const url = `${this.baseUrl}/dishes`;
-    this.logger.debug(`Requesting dishes from ${url}`);
-    const res = await firstValueFrom(this.httpService.get(url));
-    return res.data ?? [];
+    return this.safeGetList(`${this.baseUrl}/dishes`);
   }
 
   async findAllUsers(): Promise<any[]> {
-    const url = `${this.baseUrl}/users`;
-    this.logger.debug(`Requesting users from ${url}`);
-    const res = await firstValueFrom(this.httpService.get(url));
-    return res.data ?? [];
+    return this.safeGetList(`${this.baseUrl}/users`);
   }
 
   async findAllPayments(): Promise<any[]> {
-    const url = `${this.baseUrl}/payments`;
-    this.logger.debug(`Requesting payments from ${url}`);
-    const res = await firstValueFrom(this.httpService.get(url));
-    return res.data ?? [];
+    return this.safeGetList(`${this.baseUrl}/payments`);
+  }
+
+  async findAllMenus(): Promise<any[]> {
+    return this.safeGetList(`${this.baseUrl}/menus`);
   }
 }

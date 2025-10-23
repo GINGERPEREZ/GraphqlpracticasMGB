@@ -16,4 +16,7 @@ export class FiltroProductoInput {
 
   @Field(() => ID, { nullable: true, description: 'Menu id.' })
   menuId?: string;
+
+  @Field(() => String, { nullable: true, description: 'Menu name (category name) para buscar por nombre de categoria.' })
+  menuName?: string;
 }
