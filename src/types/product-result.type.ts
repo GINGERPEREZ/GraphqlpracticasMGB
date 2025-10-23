@@ -46,4 +46,8 @@ export class ProductResultType {
     description: 'Restaurante asociado, resuelto bajo demanda desde la API REST.',
   })
   restaurant?: RestaurantType | null;
+
+  menuCache?: MenuType | null;
+
+  restaurantCache?: RestaurantType | null;
 }

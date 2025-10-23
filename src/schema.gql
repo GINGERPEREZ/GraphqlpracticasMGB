@@ -192,7 +192,7 @@ type Query {
   dailyRevenue: [DailyRevenueType!]!
 
   """Historial de compras de un cliente filtrado por fecha y total."""
-  historialComprasCliente(clienteId: Int!, filtro: FiltroHistorialInput): [PurchaseType!]!
+  historialComprasCliente(clienteId: ID!, filtro: FiltroHistorialInput): [PurchaseType!]!
 
   """Retorna un perfil enriquecido del usuario con sus ultimas actividades."""
   perfilUsuario(

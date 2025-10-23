@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
 
-import { BusquedaResolver } from './resolvers/busqueda.resolver.js';
+import { BusquedaResolver, BusquedaPurchaseResolver } from './resolvers/busqueda.resolver.js';
 import { BusquedaService } from './services/busqueda.service.js';
 
 @Module({
@@ -11,7 +11,7 @@ import { BusquedaService } from './services/busqueda.service.js';
       maxRedirects: 5,
     }),
   ],
-  providers: [BusquedaService, BusquedaResolver],
+  providers: [BusquedaService, BusquedaResolver, BusquedaPurchaseResolver],
   exports: [BusquedaService],
 })
 export class BusquedaModule {}

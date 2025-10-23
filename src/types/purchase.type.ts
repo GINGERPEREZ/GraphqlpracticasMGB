@@ -35,4 +35,8 @@ export class PurchaseType {
     description: 'Usuario que realizo el pago, resuelto bajo demanda.',
   })
   user?: UserType | null;
+
+  reservationCache?: ReservationSummaryType | null;
+
+  userCache?: UserType | null;
 }
