@@ -5,12 +5,12 @@ export class UserType {
   @Field(() => ID)
   id!: string;
 
-  @Field()
+  @Field(() => String)
   email!: string;
 
-  @Field()
+  @Field(() => String)
   names!: string;
 
-  @Field()
+  @Field(() => String)
   phone!: string;
 }

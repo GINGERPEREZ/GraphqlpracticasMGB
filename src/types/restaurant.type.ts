@@ -1,28 +1,28 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 
 @ObjectType({ description: 'Informacion basica de un restaurante.' })
 export class RestaurantType {
   @Field(() => ID)
   id!: string;
 
-  @Field()
+  @Field(() => String)
   name!: string;
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   description?: string | null;
 
-  @Field()
+  @Field(() => String)
   address!: string;
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   openingHours?: string | null;
 
-  @Field()
+  @Field(() => Int)
   capacity!: number;
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   imageId?: string | null;
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   imageUrl?: string | null;
 }

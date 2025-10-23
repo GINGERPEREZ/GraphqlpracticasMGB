@@ -1,4 +1,4 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 import { GraphQLISODateTime } from '@nestjs/graphql';
 
 import { RestaurantType } from './restaurant.type.js';
@@ -22,16 +22,16 @@ export class ReservationSummaryType {
   @Field(() => GraphQLISODateTime)
   reservationDate!: Date;
 
-  @Field()
+  @Field(() => String)
   reservationTime!: string;
 
-  @Field()
+  @Field(() => Int)
   guestCount!: number;
 
-  @Field()
+  @Field(() => String)
   status!: string;
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   notes?: string | null;
 
   @Field(() => RestaurantType, {

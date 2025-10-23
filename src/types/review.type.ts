@@ -15,7 +15,7 @@ export class ReviewType {
   @Field(() => Float)
   rating!: number;
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   comment?: string | null;
 
   @Field(() => GraphQLISODateTime)

@@ -1,0 +1,135 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+"""Informacion detallada de un plato del menu."""
+type DishType {
+  description: String
+  id: ID!
+  imageId: String
+  imageUrl: String
+  menuId: ID!
+  name: String!
+  price: Float!
+  restaurantId: ID!
+}
+
+"""Informacion de un menu disponible en un restaurante."""
+type MenuType {
+  coverImageUrl: String
+  description: String
+  id: ID!
+  name: String!
+  price: Float
+  restaurantId: ID!
+}
+
+"""Resumen de un pago asociado a una reservacion."""
+type PaymentSummaryType {
+  amount: Float!
+  currency: String!
+  id: ID!
+  method: String!
+  notes: String
+  paidAt: DateTime!
+  reference: String
+
+  """Reservacion asociada, resuelta bajo demanda."""
+  reservation: ReservationSummaryType
+  reservationId: ID!
+  status: String!
+  userId: ID!
+}
+
+"""Perfil consolidado de un usuario."""
+type PerfilUsuarioType {
+  gastoTotal: Float!
+  ultimasReservas: [ReservationSummaryType!]!
+  ultimosPagos: [PaymentSummaryType!]!
+  usuario: UserType!
+}
+
+"""Detalle completo de un plato con su contexto."""
+type ProductoDetalladoType {
+  menu: MenuType!
+  plato: DishType!
+  restaurante: RestaurantType!
+  ultimasResenas: [ReviewType!]!
+}
+
+type Query {
+  """Retorna un perfil enriquecido del usuario con sus ultimas actividades."""
+  perfilUsuario(
+    """Identificador del usuario."""
+    id: ID!
+  ): PerfilUsuarioType!
+
+  """
+  Obtiene la informacion completa de un plato incluyendo contexto y reseñas.
+  """
+  productoDetallado(
+    """Identificador del plato a consultar."""
+    id: ID!
+  ): ProductoDetalladoType!
+
+  """Metricas principales para un tablero ejecutivo."""
+  resumenGeneral: ResumenGeneralType!
+}
+
+"""Resumen de una reservacion realizada por un usuario."""
+type ReservationSummaryType {
+  guestCount: Int!
+  id: ID!
+  notes: String
+  reservationDate: DateTime!
+  reservationTime: String!
+
+  """Restaurante asociado a la reservacion. Resuelto bajo demanda."""
+  restaurant: RestaurantType
+  restaurantId: ID!
+  status: String!
+  tableId: ID!
+  userId: ID!
+}
+
+"""Informacion basica de un restaurante."""
+type RestaurantType {
+  address: String!
+  capacity: Int!
+  description: String
+  id: ID!
+  imageId: String
+  imageUrl: String
+  name: String!
+  openingHours: String
+}
+
+"""Metricas generales para tableros ejecutivos."""
+type ResumenGeneralType {
+  totalClientes: Int!
+  totalPlatos: Int!
+  totalVentasHoy: Float!
+}
+
+"""Resena realizada por un cliente."""
+type ReviewType {
+  comment: String
+  createdAt: DateTime!
+  id: ID!
+  rating: Float!
+  restaurantId: ID!
+  userId: ID!
+}
+
+"""Representa un usuario dentro del dominio REST."""
+type UserType {
+  email: String!
+  id: ID!
+  names: String!
+  phone: String!
+}

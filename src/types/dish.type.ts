@@ -11,18 +11,18 @@ export class DishType {
   @Field(() => ID)
   menuId!: string;
 
-  @Field()
+  @Field(() => String)
   name!: string;
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   description?: string | null;
 
   @Field(() => Float)
   price!: number;
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   imageId?: string | null;
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   imageUrl?: string | null;
 }

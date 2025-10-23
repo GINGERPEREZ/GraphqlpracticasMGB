@@ -17,22 +17,22 @@ export class PaymentSummaryType {
   @Field(() => Float)
   amount!: number;
 
-  @Field()
+  @Field(() => String)
   currency!: string;
 
-  @Field()
+  @Field(() => String)
   method!: string;
 
-  @Field()
+  @Field(() => String)
   status!: string;
 
   @Field(() => GraphQLISODateTime)
   paidAt!: Date;
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   reference?: string | null;
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   notes?: string | null;
 
   @Field(() => ReservationSummaryType, {

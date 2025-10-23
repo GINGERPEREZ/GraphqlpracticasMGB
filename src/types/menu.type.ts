@@ -1,4 +1,4 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, Float, ID, ObjectType } from '@nestjs/graphql';
 
 @ObjectType({
   description: 'Informacion de un menu disponible en un restaurante.',
@@ -10,15 +10,15 @@ export class MenuType {
   @Field(() => ID)
   restaurantId!: string;
 
-  @Field()
+  @Field(() => String)
   name!: string;
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   description?: string | null;
 
-  @Field({ nullable: true })
+  @Field(() => Float, { nullable: true })
   price?: number | null;
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   coverImageUrl?: string | null;
 }
