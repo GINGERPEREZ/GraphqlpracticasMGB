@@ -20,15 +20,15 @@ export class BusquedaResolver {
     @Args('filtro', { nullable: true }) filtro?: FiltroProductoInput,
     @Args('paginacion', { nullable: true }) paginacion?: PaginationInput,
   ): Promise<PaginatedProductsType> {
-    const items = await this.busquedaService.findAllProductos();
+  const items = await this.busquedaService.findAllDishes();
 
     // Filtrado
     let filtered = items.filter((p: any) => {
       if (filtro?.nombre && !p.name.toLowerCase().includes(filtro.nombre.toLowerCase())) return false;
       if (filtro?.precioMin != null && p.price < filtro.precioMin) return false;
       if (filtro?.precioMax != null && p.price > filtro.precioMax) return false;
-      if (filtro?.categoriaId && String(p.categoryId) !== String(filtro.categoriaId)) return false;
-      if (filtro?.stockMin != null && (p.stock ?? 0) < filtro.stockMin) return false;
+  if (filtro?.restaurantId && String(p.restaurantId) !== String(filtro.restaurantId)) return false;
+  if (filtro?.menuId && String(p.menuId) !== String(filtro.menuId)) return false;
       return true;
     });
 
@@ -40,7 +40,8 @@ export class BusquedaResolver {
       name: p.name,
       price: Number(p.price),
       stock: Number(p.stock ?? 0),
-      categoryId: p.categoryId ? String(p.categoryId) : null,
+      categoryId: p.menuId ? String(p.menuId) : null,
+      restaurantId: p.restaurantId ? String(p.restaurantId) : null,
     }));
 
     return {
@@ -58,7 +59,7 @@ export class BusquedaResolver {
     @Args('criterio', { type: () => String }) criterio: string,
     @Args('orden', { type: () => String, nullable: true }) orden?: string,
   ): Promise<UserType[]> {
-    const clientes = await this.busquedaService.findAllClientes();
+  const clientes = await this.busquedaService.findAllUsers();
     const lower = criterio.toLowerCase();
     let filtered = clientes.filter((c: any) => {
       return (
@@ -83,8 +84,8 @@ export class BusquedaResolver {
     @Args('clienteId', { type: () => Int }) clienteId: number,
     @Args('filtro', { nullable: true }) filtro?: FiltroHistorialInput,
   ): Promise<PurchaseType[]> {
-    const ventas = await this.busquedaService.findAllVentas();
-    let filtered = ventas.filter((v: any) => Number(v.clienteId) === Number(clienteId));
+  const ventas = await this.busquedaService.findAllPayments();
+  let filtered = ventas.filter((v: any) => Number(v.userId) === Number(clienteId));
 
     if (filtro?.fechaDesde) {
       filtered = filtered.filter((v: any) => new Date(v.fecha) >= new Date(filtro.fechaDesde as any));
@@ -100,6 +101,6 @@ export class BusquedaResolver {
     }
 
     // Map to PurchaseType shape
-    return filtered.map((v: any) => ({ id: String(v.id), clienteId: String(v.clienteId), total: Number(v.total), fecha: new Date(v.fecha) }));
+  return filtered.map((v: any) => ({ id: String(v.id), reservationId: String(v.reservationId), userId: String(v.userId), amount: Number(v.amount), currency: v.currency ?? 'USD', paidAt: new Date(v.paidAt) }));
   }
 }
