@@ -1,98 +1,71 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Gateway GraphQL - Taller 5
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Este proyecto implementa un **Gateway GraphQL** con NestJS (puerto 3001) que consume la API REST del Taller 4 (puerto 3000). Se trabaja con enfoque _code-first_ para mantener un esquema tipado y documentado mediante decoradores.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Requisitos previos
 
-## Description
+- Node.js 20+
+- API REST del Taller 4 en ejecución (`http://localhost:3000` por defecto)
+- Variables de entorno opcionales:
+  - `PORT`: Puerto para el Gateway GraphQL (default: `3001`).
+  - `REST_API_URL`: URL base de la API REST (default: `http://localhost:3000`).
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Instalación
 
-## Project setup
-
-```bash
-$ npm install
+```powershell
+npm install
 ```
 
-## Compile and run the project
+## Ejecución en desarrollo
 
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+```powershell
+npm run start:dev
 ```
 
-## Run tests
+El servidor expone el _playground_ GraphQL en `http://localhost:3001/graphql`.
 
-```bash
-# unit tests
-$ npm run test
+## Arquitectura de carpetas
 
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+  common/rest        # Cliente HTTP contra la API REST
+  types              # Tipos GraphQL compartidos
+  inputs             # Inputs GraphQL compartidos
+  agregacion         # Módulo asignado al Integrante 1
+  analytics          # Espacio reservado al Integrante 2
+  busqueda           # Espacio reservado al Integrante 3
 ```
 
+- `GraphQLModule` se configura en `AppModule` para generar el esquema automáticamente (`src/schema.gql`).
+- `RestClientService` centraliza las llamadas HTTP y el manejo de errores.
+- Cada módulo define resolvers, servicios y tipos específicos.
+
+## Queries implementadas (Integrante 1)
+
+1. `perfilUsuario(id: ID!)`
+   - Devuelve datos del usuario, sus últimas 3 reservas y 3 pagos, y el gasto total acumulado.
+2. `productoDetallado(id: ID!)`
+   - Combina información del plato, menú, restaurante y las 5 reseñas más recientes.
+3. `resumenGeneral`
+   - Muestra métricas generales: total de clientes, total de platos y ventas del día actual.
+
+Resolutores adicionales (`@ResolveField`) permiten cargar relaciones bajo demanda (restaurante de la reserva, reserva de un pago, etc.).
+
+## Próximos pasos para el equipo
+
+- Revisar el documento `docs/plan-equipo.md` con la distribución detallada de tareas.
+- Integrante 2 (Analytics) y 3 (Búsqueda) deben definir sus queries antes de implementar.
+- Reutilizar `RestClientService` en los nuevos módulos para mantener consistencia.
+- Documentar cada query con descripciones claras y ejemplos de uso.
+
+## Testing manual sugerido
+
+1. Levantar la API REST del Taller 4 (puerto 3000).
+2. Levantar este Gateway (`npm run start:dev`).
+3. Abrir `http://localhost:3001/graphql` y ejecutar las queries de ejemplo.
+4. Validar que los datos coinciden con las respuestas de la API REST.
+
+---
+
+Cualquier duda o ajuste de arquitectura debe discutirse en equipo antes de modificar los módulos compartidos.
 With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
