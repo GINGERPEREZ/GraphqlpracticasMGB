@@ -2,6 +2,36 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+"""Métricas consolidadas de negocio (Dashboard KPIs)"""
+type BusinessKPIsType {
+  """Métricas de reservaciones"""
+  reservations: ReservationMetricsType!
+
+  """Métricas de ingresos"""
+  revenue: RevenueMetricsType!
+
+  """Métricas de reseñas"""
+  reviews: ReviewMetricsType!
+
+  """Total de restaurantes"""
+  totalRestaurants: Int!
+
+  """Total de usuarios registrados"""
+  totalUsers: Int!
+}
+
+"""Ingresos agrupados por día"""
+type DailyRevenueType {
+  """Fecha (YYYY-MM-DD)"""
+  date: String!
+
+  """Cantidad de pagos"""
+  paymentCount: Int!
+
+  """Ingresos del día"""
+  revenue: Float!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
@@ -63,6 +93,14 @@ type ProductoDetalladoType {
 }
 
 type Query {
+  """
+  Métricas consolidadas de negocio: ingresos, reservas, reseñas, usuarios y restaurantes
+  """
+  businessKPIs: BusinessKPIsType!
+
+  """Ingresos agrupados por día (últimos N días con pagos)"""
+  dailyRevenue: [DailyRevenueType!]!
+
   """Retorna un perfil enriquecido del usuario con sus ultimas actividades."""
   perfilUsuario(
     """Identificador del usuario."""
@@ -77,8 +115,40 @@ type Query {
     id: ID!
   ): ProductoDetalladoType!
 
+  """Métricas detalladas de reservaciones"""
+  reservationMetrics: ReservationMetricsType!
+
   """Metricas principales para un tablero ejecutivo."""
   resumenGeneral: ResumenGeneralType!
+
+  """Métricas detalladas de ingresos"""
+  revenueMetrics: RevenueMetricsType!
+
+  """Métricas de calificaciones y reseñas"""
+  reviewMetrics: ReviewMetricsType!
+
+  """
+  Restaurantes ordenados por ingresos totales (basado en reservationId de pagos)
+  """
+  topRestaurantsByRevenue: [TopRestaurantType!]!
+}
+
+"""Métricas de reservaciones"""
+type ReservationMetricsType {
+  """Tasa de cancelación (porcentaje)"""
+  cancellationRate: Float!
+
+  """Reservaciones canceladas"""
+  cancelledReservations: Int!
+
+  """Reservaciones completadas"""
+  completedReservations: Int!
+
+  """Reservaciones confirmadas"""
+  confirmedReservations: Int!
+
+  """Total de reservaciones"""
+  totalReservations: Int!
 }
 
 """Resumen de una reservacion realizada por un usuario."""
@@ -116,6 +186,33 @@ type ResumenGeneralType {
   totalVentasHoy: Float!
 }
 
+"""Métricas de ingresos totales"""
+type RevenueMetricsType {
+  """Valor promedio de pago"""
+  avgPaymentValue: Float!
+
+  """Cantidad de pagos completados"""
+  totalPayments: Int!
+
+  """Ingresos totales de pagos completados"""
+  totalRevenue: Float!
+}
+
+"""Métricas de reseñas y calificaciones"""
+type ReviewMetricsType {
+  """Calificación promedio"""
+  avgRating: Float!
+
+  """Cantidad de reseñas con calificación 5"""
+  fiveStarCount: Int!
+
+  """Cantidad de reseñas con calificación 1"""
+  oneStarCount: Int!
+
+  """Total de reseñas"""
+  totalReviews: Int!
+}
+
 """Resena realizada por un cliente."""
 type ReviewType {
   comment: String
@@ -124,6 +221,18 @@ type ReviewType {
   rating: Float!
   restaurantId: ID!
   userId: ID!
+}
+
+"""Top restaurante por ingresos"""
+type TopRestaurantType {
+  """Cantidad de pagos"""
+  paymentCount: Int!
+
+  """ID del restaurante"""
+  restaurantId: String!
+
+  """Ingresos totales"""
+  totalRevenue: Float!
 }
 
 """Representa un usuario dentro del dominio REST."""
