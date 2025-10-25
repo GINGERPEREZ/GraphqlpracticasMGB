@@ -1,5 +1,19 @@
 # Gateway GraphQL - Sistema de Reservas de Restaurantes
 
+## 📋 Objetivo de la práctica
+
+Desarrollar un **Gateway GraphQL** con **NestJS** que actúa como capa de abstracción sobre la API REST del sistema MesaYa. Esta práctica implementa:
+
+* Esquema GraphQL code-first generado automáticamente desde TypeScript
+* Resolvers que consumen la API REST (puerto 3000)
+* Queries agregadas que combinan múltiples endpoints REST
+* Sistema de analytics con métricas y estadísticas
+* Búsqueda avanzada con filtros complejos
+* GraphQL Playground para pruebas interactivas
+* Carga de datos bajo demanda con @ResolveField
+
+El gateway expone un esquema GraphQL unificado en el puerto 3001, permitiendo consultas más flexibles y eficientes que la API REST tradicional.
+
 ## 📋 Descripción
 
 **Gateway GraphQL** construido con **NestJS** que actúa como capa de abstracción sobre la API REST del sistema MesaYa. Este gateway consume la API REST (puerto 3000) y expone un esquema GraphQL unificado (puerto 3001), permitiendo consultas más flexibles y eficientes.
@@ -100,6 +114,56 @@ npm start
 # Modo debug
 npm run start:debug
 ```
+
+## 🌐 Puerto y rutas principales
+
+* **Puerto del Gateway GraphQL**: `3001` (configurable via `PORT`)
+* **API REST requerida**: `http://localhost:3000` (configurable via `REST_API_URL`)
+
+### Endpoints principales
+
+```http
+# GraphQL Playground - Interfaz interactiva
+GET http://localhost:3001/graphql
+
+# Endpoint GraphQL para queries y mutations
+POST http://localhost:3001/graphql
+```
+
+### Ejemplo de Query básica
+
+```graphql
+# Obtener todos los restaurantes
+query {
+  restaurants {
+    restaurantId
+    name
+    address
+    phone
+  }
+}
+```
+
+### Ejemplo de Query agregada
+
+```graphql
+# Perfil completo de usuario con reservas y pagos
+query {
+  perfilUsuario(id: "1") {
+    id
+    name
+    email
+    ultimasReservas {
+      reservationId
+      date
+      status
+    }
+    gastoTotal
+  }
+}
+```
+
+**Nota importante**: Asegúrate de que la API REST (puerto 3000) esté ejecutándose antes de iniciar el Gateway GraphQL.
 
 ## 📊 Queries implementadas
 
@@ -268,9 +332,56 @@ Para agregar nuevas queries:
 4. Documentar con descripciones claras
 5. Actualizar esquema automáticamente
 
-## 🧪 Testing
+## 🧪 Ejecución de pruebas
 
-### Testing manual sugerido
+### Pruebas unitarias
+
+```powershell
+# Ejecutar todas las pruebas unitarias
+npm run test
+
+# Pruebas con modo watch (recarga automática)
+npm run test:watch
+```
+
+Las pruebas unitarias verifican:
+
+* Resolvers de GraphQL y su lógica
+* Servicios que consumen la API REST
+* Transformación de datos entre REST y GraphQL
+* Manejo de errores
+
+### Pruebas de cobertura
+
+```powershell
+# Generar reporte de cobertura de código
+npm run test:cov
+```
+
+El reporte se genera en `coverage/` e indica qué porcentaje del código está cubierto.
+
+### Pruebas End-to-End (E2E)
+
+```powershell
+# Ejecutar pruebas E2E
+npm run test:e2e
+```
+
+Las pruebas E2E verifican:
+
+* Queries completas de GraphQL
+* Integración con la API REST
+* Respuestas correctas del esquema GraphQL
+* Agregaciones y búsquedas complejas
+
+### Debug de pruebas
+
+```powershell
+# Ejecutar pruebas en modo debug
+npm run test:debug
+```
+
+### Testing manual recomendado
 
 1. **Levantar API REST** (puerto 3000)
 
@@ -292,13 +403,14 @@ Para agregar nuevas queries:
 
 4. **Ejecutar queries de ejemplo**
 
-   Prueba las queries documentadas arriba
+   Prueba las queries documentadas en las secciones anteriores
 
-### Validación
+### Validación esperada
 
 * ✅ Verificar que los datos coincidan con la API REST
 * ✅ Probar resolvers de campos anidados
-* ✅ Validar manejo de errores
+* ✅ Validar manejo de errores cuando la API REST no está disponible
+* ✅ Comprobar agregaciones y analytics correctos
 
 ## 📝 Ejemplos de uso
 
